@@ -1,0 +1,59 @@
+cmake_minimum_required(VERSION 3.22)
+
+project(Vessel VERSION 0.1.0)
+
+set(INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include/Vessel")
+
+juce_add_plugin(${PROJECT_NAME}
+    COMPANY_NAME BlueOrangePurple
+    IS_SYNTH FALSE
+    NEEDS_MIDI_INPUT TRUE
+    NEEDS_MIDI_OUTPUT TRUE
+    PLUGIN_MANUFACTURER_CODE IBOP
+    PLUGIN_CODE VESL
+    FORMATS VST3
+    PRODUCT_NAME "Vessel"
+)
+
+target_sources(${PROJECT_NAME}
+    PRIVATE
+        source/PluginEditor.cpp
+        source/PluginProcessor.cpp
+        ${INCLUDE_DIR}/PluginEditor.h
+        ${INCLUDE_DIR}/PluginProcessor.h
+)
+
+target_include_directories(${PROJECT_NAME}
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
+
+# Links to all necessary dependencies. The present ones are recommended by JUCE.
+# If you use one of the additional modules, like the DSP module, you need to specify it here.
+target_link_libraries(${PROJECT_NAME}
+    PRIVATE
+        juce::juce_audio_utils
+    PUBLIC
+        juce::juce_recommended_config_flags
+        juce::juce_recommended_lto_flags
+        juce::juce_recommended_warning_flags
+)
+
+target_compile_definitions(${PROJECT_NAME}
+    PUBLIC
+        JUCE_WEB_BROWSER=0
+        JUCE_USE_CURL=0
+        JUCE_VST3_CAN_REPLACE_VST2=0
+)
+
+# Enables all warnings and treats warnings as errors.
+# This needs to be set up only for your projects, not 3rd party
+if (MSVC)
+    target_compile_options(${PROJECT_NAME} PRIVATE /Wall /WX)
+    # Silences some deprecation warnings that (hopefully) will be fixed in a future release of JUCE.
+    target_compile_definitions(${PROJECT_NAME}
+        PRIVATE
+            _SILENCE_CXX23_ALIGNED_STORAGE_DEPRECATION_WARNING)
+else()
+    target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic)
+endif()
