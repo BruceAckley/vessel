@@ -17,8 +17,10 @@ juce_add_plugin(${PROJECT_NAME}
 
 target_sources(${PROJECT_NAME}
     PRIVATE
+        source/MidiProcessor.cpp
         source/PluginEditor.cpp
         source/PluginProcessor.cpp
+        ${INCLUDE_DIR}/MidiProcessor.h
         ${INCLUDE_DIR}/PluginEditor.h
         ${INCLUDE_DIR}/PluginProcessor.h
 )
@@ -26,6 +28,7 @@ target_sources(${PROJECT_NAME}
 target_include_directories(${PROJECT_NAME}
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/models
 )
 
 # Links to all necessary dependencies. The present ones are recommended by JUCE.

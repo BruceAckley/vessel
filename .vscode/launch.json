@@ -1,0 +1,10 @@
+{
+    "configurations": [
+        {
+            "name": "Attach to Process",
+            "type": "lldb",
+            "request": "attach",
+            "pid": "${command:pickProcess}"
+        }
+    ]
+}
