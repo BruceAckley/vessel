@@ -120,11 +120,6 @@ bool AudioPluginAudioProcessor::hasEditor() const {
 }
 
 juce::AudioProcessorEditor* AudioPluginAudioProcessor::createEditor() {
-  // TEST loading of chord data
-  auto cwd = juce::File::getCurrentWorkingDirectory().getFullPathName();
-  juce::File jsonFile("./plugin/config/chords.json");
-  juce::Array<Chord> chords = loadChordsFromJson(jsonFile);
-
   return new AudioPluginAudioProcessorEditor(*this);
 }
 
