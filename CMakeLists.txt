@@ -20,4 +20,6 @@ CPMAddPackage(
     SOURCE_DIR ${PACKAGE_DIR}/juce
 )
 
+find_package(SQLite3 REQUIRED)
+
 add_subdirectory(plugin)

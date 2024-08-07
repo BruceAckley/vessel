@@ -36,6 +36,7 @@ target_include_directories(${PROJECT_NAME}
 # If you use one of the additional modules, like the DSP module, you need to specify it here.
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
+        SQLite::SQLite3
         juce::juce_audio_utils
     PUBLIC
         juce::juce_recommended_config_flags
