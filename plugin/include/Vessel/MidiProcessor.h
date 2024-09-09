@@ -50,13 +50,3 @@ class MidiProcessor
             }
         }
 };
-
-// Left off at 19:50  here: https://www.youtube.com/watch?v=tgf6J8foCiw
-
-// TODO: Chord model
-// - When user hits a note, what happens? The note is mapped to a chord and that chord is output as MIDI.
-// - Black keys are fifths, like Nopia (double check how that was presented)
-//      - Chord being played is displayed in plugin
-//      - Notes making up the chord being played are displayed
-//      - Dissonance level is shown (based on tonic, subdominant, or dominant)
-//      - Recommended next chords (based on connections) are shown, along with the key on the keyboard to use for that chord

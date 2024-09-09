@@ -20,9 +20,13 @@ target_sources(${PROJECT_NAME}
         source/MidiProcessor.cpp
         source/PluginEditor.cpp
         source/PluginProcessor.cpp
+        database/sqlite3.c
+        database/DatabaseManager.cpp
         ${INCLUDE_DIR}/MidiProcessor.h
         ${INCLUDE_DIR}/PluginEditor.h
         ${INCLUDE_DIR}/PluginProcessor.h
+        ${INCLUDE_DIR}/sqlite3.h
+        ${INCLUDE_DIR}/DatabaseManager.h
 )
 
 target_include_directories(${PROJECT_NAME}
@@ -30,13 +34,13 @@ target_include_directories(${PROJECT_NAME}
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/models
         ${CMAKE_CURRENT_SOURCE_DIR}/config
+        ${CMAKE_CURRENT_SOURCE_DIR}/database
 )
 
 # Links to all necessary dependencies. The present ones are recommended by JUCE.
 # If you use one of the additional modules, like the DSP module, you need to specify it here.
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
-        SQLite::SQLite3
         juce::juce_audio_utils
     PUBLIC
         juce::juce_recommended_config_flags

@@ -7,7 +7,7 @@ Tonal harmony tool
 Install cmake.
 
 Install dependencies:
-`cmake -S . -B build`
+`cmake -S . -B build -Wno-dev`
 
 Compile plugin build targets:
 `cmake --build build`

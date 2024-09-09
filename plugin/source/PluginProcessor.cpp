@@ -13,6 +13,7 @@ AudioPluginAudioProcessor::AudioPluginAudioProcessor()
               .withOutput("Output", juce::AudioChannelSet::stereo(), true)
 #endif
       ) {
+  
 }
 
 AudioPluginAudioProcessor::~AudioPluginAudioProcessor() {}
