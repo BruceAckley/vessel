@@ -27,12 +27,12 @@ target_sources(${PROJECT_NAME}
         ${INCLUDE_DIR}/PluginProcessor.h
         ${INCLUDE_DIR}/sqlite3.h
         ${INCLUDE_DIR}/DatabaseManager.h
+        ${INCLUDE_DIR}/Chord.h
 )
 
 target_include_directories(${PROJECT_NAME}
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/models
         ${CMAKE_CURRENT_SOURCE_DIR}/config
         ${CMAKE_CURRENT_SOURCE_DIR}/database
 )

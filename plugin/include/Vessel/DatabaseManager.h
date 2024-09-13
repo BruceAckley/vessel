@@ -1,6 +1,7 @@
 #include <sqlite3.h>
 #include <juce_core/juce_core.h>
 #include <memory>
+#include "Chord.h"
 
 class DatabaseManager {
     public:
@@ -8,6 +9,8 @@ class DatabaseManager {
         ~DatabaseManager();
 
         void connect();
+        void runMigrations();
+        std::vector<Chord> getChords(const juce::String& map_mode);
 
     private:
         sqlite3* db;

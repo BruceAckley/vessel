@@ -1,6 +1,6 @@
 #include "Vessel/PluginProcessor.h"
 #include "Vessel/PluginEditor.h"
-#include "Chord.h"
+#include "Vessel/Chord.h"
 
 namespace audio_plugin {
 AudioPluginAudioProcessor::AudioPluginAudioProcessor()
