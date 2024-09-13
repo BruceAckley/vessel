@@ -40,13 +40,29 @@ class MidiProcessor
 
         void process(juce::MidiBuffer& midiMessages)
         {
-            for (const auto metadata : midiMessages)
-            {
-                auto midi = metadata.getMessage();
-                auto event = getEventString (midi);
-                auto timeStamp = midi.getTimeStamp();
-                auto channel = midi.getChannel();
-                auto data = getDataString (midi);
+            juce::MidiBuffer processedMidi;
+            for (const auto metadata : midiMessages) {
+                auto message = metadata.getMessage();
+                
+                // DEBUG
+                auto event = getEventString (message);
+                auto timeStamp = message.getTimeStamp();
+                auto channel = message.getChannel();
+                auto data = getDataString (message);
+                
+                if (message.isNoteOnOrOff()) {
+                    // Map the MIDI input to chords
+                    // Example: Replace the note with a chord's note
+                    for (const auto& chord : chords) {
+                        if (message.getNoteNumber() == someCondition) { // Define your condition
+                            // Modify the MIDI message based on the chord
+                            // Example: Change the note number to the chord's root note
+                            message.setNoteNumber(chord.notes[0].asMidi());
+                        }
+                    }
+                }
+                processedMidi.addEvent(message, metadata.samplePosition);
             }
+            midiMessages.swapWith(processedMidi);
         }
 };

@@ -1,6 +1,7 @@
 #include "Vessel/PluginProcessor.h"
 #include "Vessel/PluginEditor.h"
 #include "Vessel/Chord.h"
+#include "DatabaseManager.h"
 
 namespace audio_plugin {
 AudioPluginAudioProcessor::AudioPluginAudioProcessor()
@@ -12,8 +13,14 @@ AudioPluginAudioProcessor::AudioPluginAudioProcessor()
 #endif
               .withOutput("Output", juce::AudioChannelSet::stereo(), true)
 #endif
-      ) {
-  
+      ),
+      dbManager(juce::File::getSpecialLocation(juce::File::userApplicationDataDirectory)
+                    .getChildFile("Vessel")
+                    .getChildFile("chords.db")
+                    .getFullPathName())
+{
+    dbManager.connect();
+    chords = dbManager.getChords("simple_traditional");
 }
 
 AudioPluginAudioProcessor::~AudioPluginAudioProcessor() {}

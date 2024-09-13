@@ -4,14 +4,18 @@
 #include "Chord.h"
 
 class DatabaseManager {
-    public:
-        DatabaseManager(const juce::String& databasePath);
-        ~DatabaseManager();
+public:
+    DatabaseManager(const juce::String& databasePath);
+    ~DatabaseManager();
 
-        void connect();
-        void runMigrations();
-        std::vector<Chord> getChords(const juce::String& map_mode);
+    void connect();
+    void runMigrations();
+    std::vector<Chord> getChords(const juce::String& map_mode);
 
-    private:
-        sqlite3* db;
+private:
+    sqlite3* db;
+
+    int getCurrentMigrationRevision();
+    int getLatestMigrationRevision();
+    void applyMigrations(int currentRevision, int latestRevision);
 };
