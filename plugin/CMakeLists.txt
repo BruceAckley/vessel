@@ -13,6 +13,7 @@ juce_add_plugin(${PROJECT_NAME}
     PLUGIN_CODE VESL
     FORMATS VST3
     PRODUCT_NAME "Vessel"
+    NEEDS_WEBVIEW2 TRUE
 )
 
 target_sources(${PROJECT_NAME}
@@ -42,6 +43,7 @@ target_include_directories(${PROJECT_NAME}
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
         juce::juce_audio_utils
+        juce::juce_gui_extra
     PUBLIC
         juce::juce_recommended_config_flags
         juce::juce_recommended_lto_flags
@@ -53,6 +55,8 @@ target_compile_definitions(${PROJECT_NAME}
         JUCE_WEB_BROWSER=0
         JUCE_USE_CURL=0
         JUCE_VST3_CAN_REPLACE_VST2=0
+        JUCE_WEB_BROWSER=1
+        JUCE_USE_WIN_WEBVIEW2_WITH_STATIC_LINKING=1
 )
 
 # Enables all warnings and treats warnings as errors.
