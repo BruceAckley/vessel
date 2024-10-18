@@ -18,3 +18,18 @@ If we can read the length and position in the clip (timing),
 
 3D explorer
 Secondary functions
+
+Buy this for inspiration:
+https://www.youtube.com/watch?v=buIpYXq80_Q&list=PLt-Oh3MSFwB8mfyRvS0YGpLpSW8t4ci_0
+
+# THREEJS
+
+Use ThreeJS TextGeometry primitive: https://threejs.org/manual/#en/primitives#Diagram-TextGeometry
+This could draw chord names
+
+Use ThreeJS Picking for clicking: https://threejs.org/manual/#en/picking
+
+Manual ThreeJS https://threejs.org/manual/#en/tips#tabindex
+
+O_O Flying: https://threejs.org/docs/index.html#examples/en/controls/FlyControls
+Example: https://threejs.org/examples/misc_controls_fly.html

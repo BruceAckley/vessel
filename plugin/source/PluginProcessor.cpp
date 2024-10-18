@@ -1,7 +1,6 @@
 #include "Vessel/PluginProcessor.h"
 #include "Vessel/PluginEditor.h"
 #include "Vessel/Chord.h"
-#include "DatabaseManager.h"
 
 namespace audio_plugin {
 AudioPluginAudioProcessor::AudioPluginAudioProcessor()
@@ -14,13 +13,13 @@ AudioPluginAudioProcessor::AudioPluginAudioProcessor()
               .withOutput("Output", juce::AudioChannelSet::stereo(), true)
 #endif
       ),
-      dbManager(juce::File::getSpecialLocation(juce::File::userApplicationDataDirectory)
-                    .getChildFile("Vessel")
-                    .getChildFile("chords.db")
-                    .getFullPathName())
+      dbManager()
 {
     dbManager.connect();
-    chords = dbManager.getChords("simple_traditional");
+    dbManager.runMigrations();
+    chords = dbManager.getChords("major");
+    auto test = 1;
+    // midiProcessor.setChords(chords);
 }
 
 AudioPluginAudioProcessor::~AudioPluginAudioProcessor() {}
@@ -120,7 +119,7 @@ bool AudioPluginAudioProcessor::isBusesLayoutSupported(
 void AudioPluginAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer,
                                              juce::MidiBuffer& midiMessages) {
   buffer.clear();
-  midiProcessor.process(midiMessages);
+  // midiProcessor.process(midiMessages);
 }
 
 bool AudioPluginAudioProcessor::hasEditor() const {

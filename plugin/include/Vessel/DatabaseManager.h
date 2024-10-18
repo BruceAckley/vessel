@@ -5,7 +5,7 @@
 
 class DatabaseManager {
 public:
-    DatabaseManager(const juce::String& databasePath);
+    DatabaseManager();
     ~DatabaseManager();
 
     void connect();
@@ -15,7 +15,6 @@ public:
 private:
     sqlite3* db;
 
-    int getCurrentMigrationRevision();
-    int getLatestMigrationRevision();
-    void applyMigrations(int currentRevision, int latestRevision);
+    int getCurrentChordCount();
+    void applyMigrations();
 };

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Chord.h"
+
 
 class MidiProcessor
 {
@@ -38,31 +40,50 @@ class MidiProcessor
             return {};
         }
 
+        void print_dbg_info(juce::MidiMessage message) {
+            auto event = getEventString (message);
+            auto timeStamp = message.getTimeStamp();
+            auto channel = message.getChannel();
+            auto data = getDataString (message);
+
+            std::cout << "Event: " << event << std::endl;
+            std::cout << "Timestamp: " << timeStamp << std::endl;
+            std::cout << "Channel: " << channel << std::endl;
+            std::cout << "Data: " << data << std::endl;
+        }
+
         void process(juce::MidiBuffer& midiMessages)
         {
             juce::MidiBuffer processedMidi;
             for (const auto metadata : midiMessages) {
                 auto message = metadata.getMessage();
-                
-                // DEBUG
-                auto event = getEventString (message);
-                auto timeStamp = message.getTimeStamp();
-                auto channel = message.getChannel();
-                auto data = getDataString (message);
-                
+
                 if (message.isNoteOnOrOff()) {
-                    // Map the MIDI input to chords
-                    // Example: Replace the note with a chord's note
-                    for (const auto& chord : chords) {
-                        if (message.getNoteNumber() == someCondition) { // Define your condition
-                            // Modify the MIDI message based on the chord
-                            // Example: Change the note number to the chord's root note
-                            message.setNoteNumber(chord.notes[0].asMidi());
-                        }
+                    int midiNote = message.getNoteNumber();
+                    auto it = chords.find(midiNote);
+                    if (it != chords.end()) {
+                        // Chord current_chord = it->second;
+                        // std::vector<int> notes = current_chord.asMidi();
+                        // for (int note : notes) {
+                        // if (message.isNoteOn()) {
+                        //         juce::MidiMessage noteOnMessage = juce::MidiMessage::noteOn(message.getChannel(), note, message.getVelocity());
+                        //         processedMidi.addEvent(noteOnMessage, metadata.samplePosition);
+                        //     } else if (message.isNoteOff()) {
+                        //         juce::MidiMessage noteOffMessage = juce::MidiMessage::noteOff(message.getChannel(), note);
+                        //         processedMidi.addEvent(noteOffMessage, metadata.samplePosition);
+                        //     }
+                        // }
                     }
                 }
                 processedMidi.addEvent(message, metadata.samplePosition);
             }
             midiMessages.swapWith(processedMidi);
         }
+
+        void setChords(const std::vector<Chord>& chordData) {
+            
+        }; 
+
+    private:
+        std::unordered_map<int, Chord> chords;
 };

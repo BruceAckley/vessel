@@ -2,6 +2,8 @@
 
 #include <juce_audio_processors/juce_audio_processors.h>
 #include "MidiProcessor.h"
+#include "Chord.h"
+#include "DatabaseManager.h"
 
 namespace audio_plugin {
 class AudioPluginAudioProcessor : public juce::AudioProcessor {

@@ -1,59 +1,52 @@
 #ifndef CHORD_H
 #define CHORD_H
 
-#include <vector>
-#include <string>
-#include <map>
-#include <stdexcept>
-
-class Note {
-public:
-    std::string name;  // "C", "F#", "Ab"
-    int octave;        // 4, 5, 6
-
-    Note(const std::string& n, int o)
-        : name(n), octave(o) {}
-
-    int asMidi() const {
-        static const std::map<std::string, int> noteToMidi = {
-            {"C", 0}, {"C#", 1}, {"Db", 1}, {"D", 2}, {"D#", 3}, {"Eb", 3}, {"E", 4}, {"F", 5},
-            {"F#", 6}, {"Gb", 6}, {"G", 7}, {"G#", 8}, {"Ab", 8}, {"A", 9}, {"A#", 10}, {"Bb", 10}, {"B", 11}
-        };
-
-        auto it = noteToMidi.find(name);
-
-        if (it != noteToMidi.end()) {
-            return it->second + (octave + 1) * 12;
-        } else {
-            throw std::invalid_argument("Invalid note name");
-        }
-    }
-};
+#include <juce_core/juce_core.h>
+#include <juce_audio_basics/juce_audio_basics.h>
 
 class Chord {
 public:
-    int id;                     // The unique identifier for the chord
-    juce::String name;           // The display name of the chord
-    juce::String root;           // The root note of the chord, like "C"
-    juce::String chordType;      // The type of the chord, like "major" or "minor"
-    std::vector<Note> notes;    // The notes that make up the chord
-    std::vector<int> midi;      // The notes that make up the chord as midi
-    juce::String scale;          // The scale, like "Major"
-    std::vector<juce::String> connections;   // The recommended transitions from the chord
-    juce::String function;       // The chord function, like "tonic"
+    juce::String function;
+    juce::String notes_rel_c3;
+    juce::String scale;
+    juce::String region;
 
-    Chord(int id, const juce::String& name, const juce::String& root, const juce::String& chordType, const juce::String& scale, const juce::String& function)
-        : id(id), name(name), root(root), chordType(chordType), scale(scale), function(function) {
-            midi = asMidi();
+    Chord(const juce::String& function, const juce::String& notes_rel_c3, const juce::String& scale, const juce::String& region)
+        : function(function), notes_rel_c3(notes_rel_c3), scale(scale), region(region) {}
+
+    std::vector<int> getNotes(juce::String& tonalCenter) {
+        std::vector<int> notes;
+        juce::StringArray noteStrings;
+        noteStrings.addTokens(notes_rel_c3, " ", "");
+        for (const auto& note : noteStrings) {
+            notes.push_back(getMidiFromNote(note, tonalCenter));
+        }
+        return notes;
+    }
+
+private:
+    int getMidiFromNote(const juce::String& note, juce::String& tonalCenter) {
+        static const std::map<juce::String, int> noteMap = {
+            {"C", 0}, {"C#", 1}, {"D", 2}, {"D#", 3}, {"E", 4}, {"F", 5},
+            {"F#", 6}, {"G", 7}, {"G#", 8}, {"A", 9}, {"A#", 10}, {"B", 11}
+        };
+
+        if (note.length() < 2 || note.length() > 3) {
+            throw std::invalid_argument("Invalid note name");
         }
 
-    std::vector<int> asMidi() {
-        std::vector<int> midiNotes;
-        for (const auto& note : notes) {
-            int midiNote = note.asMidi();
-            midiNotes.push_back(midiNote);
+        juce::String noteName = note.dropLastCharacters(1);
+        int octave = note.getLastCharacter() - '0';
+
+        if (noteMap.find(noteName) == noteMap.end() || octave < 0 || octave > 9) {
+            throw std::invalid_argument("Invalid note name");
         }
-        return midiNotes;
+
+        if (noteMap.find(tonalCenter) == noteMap.end()) {
+            throw std::invalid_argument("Invalid tonal center");
+        }
+
+        return noteMap.at(noteName) + ((octave + 1) * 12) + noteMap.at(tonalCenter);
     }
 };
 
