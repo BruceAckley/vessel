@@ -65,6 +65,9 @@
         "vector": "cpp",
         "algorithm": "cpp",
         "memory": "cpp",
-        "*.mm": "cpp"
+        "*.mm": "cpp",
+        "forward_list": "cpp",
+        "print": "cpp",
+        "stack": "cpp"
     }
 }

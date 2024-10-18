@@ -11,8 +11,9 @@ public:
     juce::String scale;
     juce::String region;
 
-    Chord(const juce::String& function, const juce::String& notes_rel_c3, const juce::String& scale, const juce::String& region)
-        : function(function), notes_rel_c3(notes_rel_c3), scale(scale), region(region) {}
+    Chord() = default;
+    Chord(const juce::String& f, const juce::String& n, const juce::String& s, const juce::String& r)
+        : function(f), notes_rel_c3(n), scale(s), region(r) {}
 
     std::vector<int> getNotes(juce::String& tonalCenter) {
         std::vector<int> notes;

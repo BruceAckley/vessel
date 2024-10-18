@@ -18,8 +18,7 @@ AudioPluginAudioProcessor::AudioPluginAudioProcessor()
     dbManager.connect();
     dbManager.runMigrations();
     chords = dbManager.getChords("major");
-    auto test = 1;
-    // midiProcessor.setChords(chords);
+    midiProcessor.setChords(chords);
 }
 
 AudioPluginAudioProcessor::~AudioPluginAudioProcessor() {}
@@ -119,7 +118,7 @@ bool AudioPluginAudioProcessor::isBusesLayoutSupported(
 void AudioPluginAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer,
                                              juce::MidiBuffer& midiMessages) {
   buffer.clear();
-  // midiProcessor.process(midiMessages);
+  midiProcessor.process(midiMessages);
 }
 
 bool AudioPluginAudioProcessor::hasEditor() const {

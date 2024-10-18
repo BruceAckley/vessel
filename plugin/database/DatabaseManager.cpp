@@ -127,7 +127,6 @@ std::vector<Chord> DatabaseManager::getChords(const juce::String& scale) {
 
         Chord chord(function, notes_rel_c3, scale, region);
         juce::String tonalCenter = "E";
-        auto notes = chord.getNotes(tonalCenter);  // TEST
         chords.push_back(chord);
     }
 
