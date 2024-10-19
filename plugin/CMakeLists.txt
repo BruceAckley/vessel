@@ -11,7 +11,7 @@ juce_add_plugin(${PROJECT_NAME}
     NEEDS_MIDI_OUTPUT TRUE
     PLUGIN_MANUFACTURER_CODE IBOP
     PLUGIN_CODE VESL
-    FORMATS VST3 Standalone
+    FORMATS AU VST3 Standalone
     PRODUCT_NAME "Vessel"
     NEEDS_WEBVIEW2 TRUE
 )
@@ -52,10 +52,9 @@ target_link_libraries(${PROJECT_NAME}
 
 target_compile_definitions(${PROJECT_NAME}
     PUBLIC
-        JUCE_WEB_BROWSER=0
+        JUCE_WEB_BROWSER=1
         JUCE_USE_CURL=0
         JUCE_VST3_CAN_REPLACE_VST2=0
-        JUCE_WEB_BROWSER=1
         JUCE_USE_WIN_WEBVIEW2_WITH_STATIC_LINKING=1
 )
 

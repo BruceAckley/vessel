@@ -33,3 +33,5 @@ Manual ThreeJS https://threejs.org/manual/#en/tips#tabindex
 
 O_O Flying: https://threejs.org/docs/index.html#examples/en/controls/FlyControls
 Example: https://threejs.org/examples/misc_controls_fly.html
+
+https://github.com/JanWilczek/juce-webview-tutorial/blob/main/plugin/ui/public/js/index.js

@@ -59,26 +59,26 @@ class MidiProcessor
             for (const auto metadata : midiMessages) {
                 auto message = metadata.getMessage();
 
-            if (message.isNoteOnOrOff()) {
-                int midiNote = message.getNoteNumber();
-                auto it = chords.find(midiNote);
+                if (message.isNoteOnOrOff()) {
+                    int midiNote = message.getNoteNumber();
+                    auto it = chords.find(midiNote);
 
-                if (it != chords.end()) {
-                    Chord chord = it->second;
-                    std::vector<int> notes = chord.getNotes(TONAL_CENTER);
-                    for (int note : notes) {
-                        if (message.isNoteOn()) {
-                            juce::MidiMessage noteOnMessage = juce::MidiMessage::noteOn(message.getChannel(), note, message.getVelocity());
-                            processedMidi.addEvent(noteOnMessage, metadata.samplePosition);
-                        } else if (message.isNoteOff()) {
-                            juce::MidiMessage noteOffMessage = juce::MidiMessage::noteOff(message.getChannel(), note);
-                            processedMidi.addEvent(noteOffMessage, metadata.samplePosition);
+                    if (it != chords.end()) {
+                        Chord chord = it->second;
+                        std::vector<int> notes = chord.getNotes(TONAL_CENTER);
+                        for (int note : notes) {
+                            if (message.isNoteOn()) {
+                                juce::MidiMessage noteOnMessage = juce::MidiMessage::noteOn(message.getChannel(), note, message.getVelocity());
+                                processedMidi.addEvent(noteOnMessage, metadata.samplePosition);
+                            } else if (message.isNoteOff()) {
+                                juce::MidiMessage noteOffMessage = juce::MidiMessage::noteOff(message.getChannel(), note);
+                                processedMidi.addEvent(noteOffMessage, metadata.samplePosition);
+                            }
                         }
                     }
                 }
             }
-                processedMidi.addEvent(message, metadata.samplePosition);
-            }
+
             midiMessages.swapWith(processedMidi);
         }
 
@@ -88,7 +88,7 @@ class MidiProcessor
                 chords[currentNote] = chord;
                 currentNote++;
             }
-        }; 
+        }
 
     private:
         std::unordered_map<int, Chord> chords;
