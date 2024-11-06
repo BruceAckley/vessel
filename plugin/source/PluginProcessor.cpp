@@ -17,7 +17,7 @@ AudioPluginAudioProcessor::AudioPluginAudioProcessor()
 {
     dbManager.connect();
     dbManager.runMigrations();
-    chords = dbManager.getChords("major");
+    chords = dbManager.getChords("basic_diatonic");
     midiProcessor.setChords(chords);
 }
 

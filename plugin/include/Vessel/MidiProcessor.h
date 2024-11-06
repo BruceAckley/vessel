@@ -41,16 +41,11 @@ class MidiProcessor
             return {};
         }
 
-        void print_dbg_info(juce::MidiMessage message) {
+        void load_dbg_info(juce::MidiMessage message) {
             auto event = getEventString (message);
             auto timeStamp = message.getTimeStamp();
             auto channel = message.getChannel();
             auto data = getDataString (message);
-
-            std::cout << "Event: " << event << std::endl;
-            std::cout << "Timestamp: " << timeStamp << std::endl;
-            std::cout << "Channel: " << channel << std::endl;
-            std::cout << "Data: " << data << std::endl;
         }
 
         void process(juce::MidiBuffer& midiMessages)
@@ -59,13 +54,16 @@ class MidiProcessor
             for (const auto metadata : midiMessages) {
                 auto message = metadata.getMessage();
 
+                load_dbg_info(message);
+
                 if (message.isNoteOnOrOff()) {
                     int midiNote = message.getNoteNumber();
                     auto it = chords.find(midiNote);
 
                     if (it != chords.end()) {
                         Chord chord = it->second;
-                        std::vector<int> notes = chord.getNotes(TONAL_CENTER);
+                        chord.setTonalCenter(TONAL_CENTER);
+                        std::vector<int> notes = chord.getMidiNotes();
                         for (int note : notes) {
                             if (message.isNoteOn()) {
                                 juce::MidiMessage noteOnMessage = juce::MidiMessage::noteOn(message.getChannel(), note, message.getVelocity());
@@ -83,10 +81,10 @@ class MidiProcessor
         }
 
         void setChords(const std::vector<Chord>& chordData) {
-            int currentNote = 60;
+            int keyboardDefaultNote = 60;
             for (const auto& chord : chordData) {
-                chords[currentNote] = chord;
-                currentNote++;
+                chords[keyboardDefaultNote] = chord;
+                keyboardDefaultNote++;
             }
         }
 

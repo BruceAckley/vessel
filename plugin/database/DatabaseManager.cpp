@@ -7,22 +7,28 @@
 enum ChordColumns {
     ID = 0,
     FUNCTION,
-    NOTES_REL_C3,
-    SCALE,
-    REGION
+    MOOD,
+    REGION,
+    INTERVALS,
+    OUTBOUND,
+    MAP_MODE
 };
 
-const int CHORD_COUNT = 7;
+const int CHORD_COUNT = 70;  // TODO: Better way of handling migrations
 
 const char* dropChordsTable = "DROP TABLE chords;";
 
 const char* createChordsTable = "CREATE TABLE IF NOT EXISTS chords ("
-                    "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-                    "function TEXT NOT NULL,"
-                    "notes_rel_c3 TEXT NOT NULL,"
-                    "scale TEXT NOT NULL,"
-                    "region TEXT NOT NULL"
-                    ");";
+    "id INTEGER PRIMARY KEY, "
+    "name TEXT, "                // Name of the chord, e.g., "I", "bIII", "VI-7b5"
+    "function TEXT, "            // Harmonic function, e.g., "tonic", "subdominant", "dominant"
+    "mood TEXT, "                // Mood of the chord, e.g., "major", "minor", "half_diminished", "diminished"
+    "region TEXT, "              // Functional region, e.g., "tonic", "subdominant", "dominant"
+    "intervals TEXT, "           // Intervals from the root, as a comma-separated string "0,4,7"
+    "outbound TEXT, "            // Contains IDs of chords that could come after in cadence
+    "map_mode TEXT "             // Mode of the map, e.g., "basic_diatonic"
+");";
+
 
 DatabaseManager::DatabaseManager() {}
 
@@ -106,9 +112,9 @@ void DatabaseManager::applyMigrations() {
 }
 
 // This function pulls all chord data from the database matching the specified "map_mode"
-std::vector<Chord> DatabaseManager::getChords(const juce::String& scale) {
+std::vector<Chord> DatabaseManager::getChords(const juce::String& map_mode) {
     std::vector<Chord> chords;
-    juce::String sql = "SELECT * FROM chords WHERE scale = ?;";
+    juce::String sql = "SELECT * FROM chords WHERE map_mode = ?;";
     sqlite3_stmt* stmt;
 
     if (sqlite3_prepare_v2(db, sql.toRawUTF8(), -1, &stmt, nullptr) != SQLITE_OK) {
@@ -116,17 +122,15 @@ std::vector<Chord> DatabaseManager::getChords(const juce::String& scale) {
         return chords;
     }
 
-    sqlite3_bind_text(stmt, 1, scale.toRawUTF8(), -1, SQLITE_STATIC);
+    sqlite3_bind_text(stmt, 1, map_mode.toRawUTF8(), -1, SQLITE_STATIC);
 
     while (sqlite3_step(stmt) == SQLITE_ROW) {
-        int id = sqlite3_column_int(stmt, ChordColumns::ID);
         juce::String function = juce::String((const char*)sqlite3_column_text(stmt, ChordColumns::FUNCTION));
-        juce::String notes_rel_c3 = juce::String((const char*)sqlite3_column_text(stmt, ChordColumns::NOTES_REL_C3));
-        juce::String scale = juce::String((const char*)sqlite3_column_text(stmt, ChordColumns::SCALE));
+        juce::String mood = juce::String((const char*)sqlite3_column_text(stmt, ChordColumns::MOOD));
         juce::String region = juce::String((const char*)sqlite3_column_text(stmt, ChordColumns::REGION));
+        juce::String intervals = juce::String((const char*)sqlite3_column_text(stmt, ChordColumns::INTERVALS));
 
-        Chord chord(function, notes_rel_c3, scale, region);
-        juce::String tonalCenter = "E";
+        Chord chord(function, mood, region, intervals);
         chords.push_back(chord);
     }
 

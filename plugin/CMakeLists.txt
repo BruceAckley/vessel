@@ -21,6 +21,7 @@ target_sources(${PROJECT_NAME}
         source/MidiProcessor.cpp
         source/PluginEditor.cpp
         source/PluginProcessor.cpp
+        source/Chord.cpp
         database/sqlite3.c
         database/DatabaseManager.cpp
         ${INCLUDE_DIR}/MidiProcessor.h

@@ -4,6 +4,9 @@ cmake-configure:
 build: cmake_configure
 	cmake --build build
 
+build-verbose: cmake_configure
+	cmake --build build -v
+
 clean:
 	rm -rf $(BUILD_DIR)
 
