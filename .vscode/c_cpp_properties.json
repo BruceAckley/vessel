@@ -6,7 +6,9 @@
             "includePath": [
                 "${workspaceFolder}/**"
             ],
-            "defines": [],
+            "defines": [
+                "DATA_DIR=\"/path/to/data/dir\""
+            ],
             "cStandard": "c11",
             "cppStandard": "c++17",
             "intelliSenseMode": "macos-clang-arm64"

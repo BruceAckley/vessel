@@ -5,6 +5,7 @@
 #include <vector>
 #include <map>
 
+
 class Chord {
 public:
     juce::String name;
@@ -27,12 +28,10 @@ public:
 private:
     int rootMidiNote = 0;
     std::vector<int> transposedNotes;
+    static const std::map<juce::String, int> chordNameToMidi;
 
     void parseIntervals(const juce::String& intervalsCSV);
     void transposeIntervals();
-
-    // Declaration only
-    static const std::map<juce::String, int> noteMap;
 };
 
 #endif // CHORD_H

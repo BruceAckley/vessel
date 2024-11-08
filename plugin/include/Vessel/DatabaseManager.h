@@ -17,4 +17,6 @@ private:
 
     int getCurrentChordCount();
     void applyMigrations();
+    void DatabaseManager::executeSQL(const char* sql, sqlite3* db);
+    void openDatabaseConnection(sqlite3** db, const juce::File& dbFile);
 };

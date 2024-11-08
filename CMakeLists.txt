@@ -16,6 +16,7 @@ include(cmake/cpm.cmake)
 CPMAddPackage(
     NAME JUCE
     GITHUB_REPOSITORY juce-framework/JUCE
+    # TODO: Uncomment when OSX Sonoma issue is fixed
     # GIT_TAG 8.0.0
     # VERSION v8.0.0
     GIT_TAG develop

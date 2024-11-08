@@ -1,5 +1,5 @@
 INSERT INTO chords 
-(function, mood, region, intervals, outbound, map_mode) VALUES
+(function, mood, region, intervals, cadence, map_mode) VALUES
     -- Basic Diatonic, Tonic
     ('I', 'major', 'tonic', '0,4,7', '', 'basic_diatonic'), 
     ('I-', 'minor', 'tonic', '0,3,7', '', 'basic_diatonic'), 
