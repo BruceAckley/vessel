@@ -1,8 +1,4 @@
 #include "Vessel/MidiProcessor.h"
-#include <juce_MidiBuffer.h>
-#include <juce_MidiMessage.h>
-
-MidiProcessor::MidiProcessor() {}
 
 void MidiProcessor::setChords(const std::vector<Chord> &chordData)
 {

@@ -15,9 +15,9 @@ public:
     std::vector<int> intervalPattern;
 
     Chord() = default;
-    Chord(const juce::String& function, const juce::String& mood,
-          const juce::String& region, const juce::String& intervalsCSV)
-        : function(function), mood(mood), region(region)
+    Chord(const juce::String& f, const juce::String& m,
+          const juce::String& r, const juce::String& intervalsCSV)
+        : function(f), mood(m), region(r)
     {
         parseIntervals(intervalsCSV);
     }
