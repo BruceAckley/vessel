@@ -5,13 +5,13 @@
 
 enum ChordColumns
 {
-    ID = 0,
-    FUNCTION,
-    MOOD,
-    REGION,
-    INTERVALS,
-    CADENCE,
-    MAP_MODE
+    ID = 1,
+    FUNCTION = 2,
+    MOOD = 3,
+    REGION = 4,
+    INTERVALS = 5,
+    CADENCE = 6,
+    MAP_MODE = 7
 };
 
 // Commands
