@@ -11,21 +11,32 @@ juce_add_plugin(${PROJECT_NAME}
     NEEDS_MIDI_OUTPUT TRUE
     PLUGIN_MANUFACTURER_CODE IBOP
     PLUGIN_CODE VESL
-    FORMATS VST3
+    FORMATS AU VST3 Standalone
     PRODUCT_NAME "Vessel"
+    NEEDS_WEBVIEW2 TRUE
 )
 
 target_sources(${PROJECT_NAME}
     PRIVATE
+        source/MidiProcessor.cpp
         source/PluginEditor.cpp
         source/PluginProcessor.cpp
+        source/Chord.cpp
+        database/sqlite3.c
+        database/DatabaseManager.cpp
+        ${INCLUDE_DIR}/MidiProcessor.h
         ${INCLUDE_DIR}/PluginEditor.h
         ${INCLUDE_DIR}/PluginProcessor.h
+        ${INCLUDE_DIR}/sqlite3.h
+        ${INCLUDE_DIR}/DatabaseManager.h
+        ${INCLUDE_DIR}/Chord.h
 )
 
 target_include_directories(${PROJECT_NAME}
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/config
+        ${CMAKE_CURRENT_SOURCE_DIR}/database
 )
 
 # Links to all necessary dependencies. The present ones are recommended by JUCE.
@@ -33,6 +44,10 @@ target_include_directories(${PROJECT_NAME}
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
         juce::juce_audio_utils
+        juce::juce_gui_extra
+        juce::juce_core
+        juce::juce_audio_basics
+        juce::juce_audio_processors
     PUBLIC
         juce::juce_recommended_config_flags
         juce::juce_recommended_lto_flags
@@ -41,9 +56,10 @@ target_link_libraries(${PROJECT_NAME}
 
 target_compile_definitions(${PROJECT_NAME}
     PUBLIC
-        JUCE_WEB_BROWSER=0
+        JUCE_WEB_BROWSER=1
         JUCE_USE_CURL=0
         JUCE_VST3_CAN_REPLACE_VST2=0
+        JUCE_USE_WIN_WEBVIEW2_WITH_STATIC_LINKING=1
 )
 
 # Enables all warnings and treats warnings as errors.

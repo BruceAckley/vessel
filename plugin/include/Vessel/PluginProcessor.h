@@ -1,6 +1,9 @@
 #pragma once
 
 #include <juce_audio_processors/juce_audio_processors.h>
+#include "MidiProcessor.h"
+#include "Chord.h"
+#include "DatabaseManager.h"
 
 namespace audio_plugin {
 class AudioPluginAudioProcessor : public juce::AudioProcessor {
@@ -36,6 +39,10 @@ public:
   void setStateInformation(const void* data, int sizeInBytes) override;
 
 private:
+  DatabaseManager dbManager;
+  std::vector<Chord> chords;
+  MidiProcessor midiProcessor;
+
   JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AudioPluginAudioProcessor)
 };
 }  // namespace audio_plugin
