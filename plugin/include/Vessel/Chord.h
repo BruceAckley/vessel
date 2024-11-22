@@ -22,13 +22,13 @@ public:
         parseIntervals(intervalsCSV);
     }
 
-    void setTonalCenter(const juce::String& tonalCenter, int octave = 3);
+    void setTonalCenter(int tonalCenter, int octave = 3);
     std::vector<int> getMidiNotes() const;
+    static const std::map<juce::String, int> chordNameToMidi;
 
 private:
     int rootMidiNote = 0;
     std::vector<int> transposedNotes;
-    static const std::map<juce::String, int> chordNameToMidi;
 
     void parseIntervals(const juce::String& intervalsCSV);
     void transposeIntervals();

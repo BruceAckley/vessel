@@ -1,10 +1,20 @@
 #include "Vessel/PluginEditor.h"
 #include "Vessel/PluginProcessor.h"
+#include <juce_audio_processors/juce_audio_processors.h>
+#include <juce_events/juce_events.h>
+#include <optional>
+#include <ranges>
+#include "juce_core/juce_core.h"
+#include "juce_graphics/juce_graphics.h"
+#include "juce_gui_extra/juce_gui_extra.h"
 
-namespace audio_plugin
+using juce::ParameterID;
+
+namespace vessel
 {
     namespace
     {
+
         std::vector<std::byte> streamToVector(juce::InputStream &stream)
         {
             // Workaround to make ssize_t work cross-platform.
@@ -43,48 +53,13 @@ namespace audio_plugin
             return "";
         }
 
+        constexpr auto LOCAL_DEV_SERVER_ADDRESS = "http://127.0.0.1:8080";
+
         enum class AssertAssetExists
         {
             no,
             yes
         };
-
-        inline juce::File getExamplesDirectory() noexcept
-        {
-#ifdef PIP_JUCE_EXAMPLES_DIRECTORY
-            MemoryOutputStream mo;
-
-            auto success = Base64::convertFromBase64(mo, JUCE_STRINGIFY(PIP_JUCE_EXAMPLES_DIRECTORY));
-            ignoreUnused(success);
-            jassert(success);
-
-            return mo.toString();
-#elif defined PIP_JUCE_EXAMPLES_DIRECTORY_STRING
-            return File{CharPointer_UTF8{PIP_JUCE_EXAMPLES_DIRECTORY_STRING}};
-#else
-            auto currentFile = juce::File::getSpecialLocation(juce::File::SpecialLocationType::currentApplicationFile);
-            auto exampleDir = currentFile.getParentDirectory().getChildFile("examples");
-
-            if (exampleDir.exists())
-                return exampleDir;
-
-            // keep track of the number of parent directories so we don't go on endlessly
-            for (int numTries = 0; numTries < 15; ++numTries)
-            {
-                if (currentFile.getFileName() == "examples")
-                    return currentFile;
-
-                const auto sibling = currentFile.getSiblingFile("examples");
-
-                if (sibling.exists())
-                    return sibling;
-
-                currentFile = currentFile.getParentDirectory();
-            }
-
-            return currentFile;
-#endif
-        }
 
         static juce::String getExtension(juce::String filename)
         {
@@ -146,14 +121,51 @@ namespace audio_plugin
         }
     } // namespace
 
-    AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor(
-        AudioPluginAudioProcessor &p)
-        : AudioProcessorEditor(&p), processorRef(p)
+    AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor(AudioPluginAudioProcessor &p)
+        : AudioProcessorEditor(&p),
+          processorRef(p),
+          tonalCenterComboBoxAttachment{
+              *processorRef.state.getParameter(id::TONAL_CENTER.getParamID()),
+              tonalCenterComboBox, nullptr},
+          webTonalCenterRelay{"tonalCenterComboBox"},
+          webView{
+              juce::WebBrowserComponent::Options{}
+                  .withBackend(
+                      juce::WebBrowserComponent::Options::Backend::webview2)
+                  .withWinWebView2Options(
+                      juce::WebBrowserComponent::Options::WinWebView2{}
+                          .withBackgroundColour(juce::Colours::black)
+                          .withUserDataFolder(juce::File::getSpecialLocation(
+                              juce::File::SpecialLocationType::tempDirectory)))
+                  .withNativeIntegrationEnabled()
+                  .withResourceProvider(
+                      [this](const auto &url)
+                      { return getResource(url); },
+                      juce::URL{LOCAL_DEV_SERVER_ADDRESS}.getOrigin())
+                  .withInitialisationData("vendor", JUCE_COMPANY_NAME)
+                  .withInitialisationData("pluginName", JUCE_PRODUCT_NAME)
+                  .withInitialisationData("pluginVersion", JUCE_PRODUCT_VERSION)
+                  .withOptionsFrom(webTonalCenterRelay)},
+          webTonalCenterComboBoxAttachment{
+              *processorRef.state.getParameter(id::TONAL_CENTER.getParamID()),
+              webTonalCenterRelay, nullptr}
     {
-        juce::ignoreUnused(processorRef);
-        addAndMakeVisible(webComponent);
+        addAndMakeVisible(webView);
+        webView.goToURL(juce::WebBrowserComponent::getResourceProviderRoot());
 
-        webComponent.goToURL(webComponent.getResourceProviderRoot());
+        // This can be used for hot reloading
+        // webView.goToURL(LOCAL_DEV_SERVER_ADDRESS);
+
+        addAndMakeVisible(tonalCenterLabel);
+
+        const auto tonalCenterParameter =
+            dynamic_cast<juce::AudioParameterChoice *>(
+                processorRef.state.getParameter(id::TONAL_CENTER.getParamID()));
+        tonalCenterComboBox.addItemList(tonalCenterParameter->choices, 1);
+        tonalCenterComboBox.setSelectedItemIndex(
+            tonalCenterParameter->getIndex(), juce::dontSendNotification);
+        addAndMakeVisible(tonalCenterComboBox);
+
         setResizable(true, true);
         setSize(800, 600);
     }
@@ -162,18 +174,43 @@ namespace audio_plugin
 
     void AudioPluginAudioProcessorEditor::resized()
     {
-        webComponent.setBounds(getLocalBounds());
+        auto bounds = getBounds();
+        tonalCenterLabel.setBounds(bounds.removeFromTop(50).reduced(5));
+        tonalCenterComboBox.setBounds(bounds.removeFromTop(50).reduced(5));
     }
-
-#if JUCE_ANDROID
-    // The localhost is available on this address to the emulator
-    const juce::String localDevServerAddress = "http://10.0.2.2:3000/";
-#else
-    const juce::String localDevServerAddress = "http://localhost:3000/";
-#endif
 
     auto AudioPluginAudioProcessorEditor::getResource(const juce::String &url) -> std::optional<Resource>
     {
+        // TODO:
+        // X Revert to zip file loading
+        // X Fix the midiprocessor mapping of tonal center to a midi note (this was actually right)
+        // - Fix parameter IDs import
+        // - Build
+        // - Finish menu component
+
+        // CODE FROM WOLF SOUND TUTORIAL:
+        // static const auto resourceFilesRoot =
+        //     juce::File::getSpecialLocation(
+        //         juce::File::SpecialLocationType::currentApplicationFile)
+        //         .getParentDirectory()
+        //         .getParentDirectory()
+        //         .getChildFile("public");
+
+        // const auto resourceToRetrieve =
+        //     url == "/" ? "index.html" : url.fromFirstOccurrenceOf("/", false, false);
+
+        // const auto resource =
+        //     resourceFilesRoot.getChildFile(resourceToRetrieve).createInputStream();
+
+        // if (resource) {
+        //     const auto extension =
+        //         resourceToRetrieve.fromLastOccurrenceOf(".", false, false);
+        //     return Resource(streamToVector(*resource), getMimeForExtension(extension));
+        // }
+
+        // return std::nullopt;
+
+        // EXISTING CODE THAT GRABS THE REACT BUILD:
         const auto urlToRetrive = url == "/" ? juce::String{"index.html"}
                                              : url.fromFirstOccurrenceOf("/", false, false);
 
@@ -198,4 +235,4 @@ namespace audio_plugin
 
         return std::nullopt;
     }
-} // namespace audio_plugin
+} // namespace vessel

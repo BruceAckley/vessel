@@ -4,6 +4,10 @@ project(Vessel VERSION 0.1.0)
 
 set(INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include/Vessel")
 
+add_compile_definitions(JUCE_COMPANY_NAME="BlueOrangePurple")
+add_compile_definitions(JUCE_PRODUCT_NAME="Vessel")
+add_compile_definitions(JUCE_PRODUCT_VERSION="0.1.0")
+
 juce_add_plugin(${PROJECT_NAME}
     COMPANY_NAME BlueOrangePurple
     IS_SYNTH FALSE
@@ -24,6 +28,7 @@ target_sources(${PROJECT_NAME}
         source/Chord.cpp
         database/sqlite3.c
         database/DatabaseManager.cpp
+        ${INCLUDE_DIR}/ParameterIDs.h
         ${INCLUDE_DIR}/MidiProcessor.h
         ${INCLUDE_DIR}/PluginEditor.h
         ${INCLUDE_DIR}/PluginProcessor.h

@@ -1,5 +1,7 @@
 #include "Vessel/MidiProcessor.h"
 
+const int OCTAVE = 3;
+
 void MidiProcessor::setChords(const std::vector<Chord> &chordData)
 {
     int keyboardDefaultNote = 60;
@@ -25,7 +27,7 @@ void MidiProcessor::process(juce::MidiBuffer &midiMessages)
             if (it != chords.end())
             {
                 Chord chord = it->second;
-                chord.setTonalCenter(tonalCenter);
+                chord.setTonalCenter(tonalCenter, OCTAVE);
                 std::vector<int> notes = chord.getMidiNotes();
 
                 for (int note : notes)
@@ -46,4 +48,9 @@ void MidiProcessor::process(juce::MidiBuffer &midiMessages)
     }
 
     midiMessages.swapWith(processedMidi);
+}
+
+void MidiProcessor::setTonalCenter(int t)
+{
+    this->tonalCenter = t;
 }
