@@ -37,14 +37,14 @@ DatabaseManager::~DatabaseManager()
     }
 }
 
-void DatabaseManager::openDatabaseConnection(sqlite3 **db, const juce::File &dbFile)
+void DatabaseManager::openDatabaseConnection(sqlite3 **db_pointer, const juce::File &dbFile)
 {
-    int resultCode = sqlite3_open(dbFile.getFullPathName().toRawUTF8(), db);
+    int resultCode = sqlite3_open(dbFile.getFullPathName().toRawUTF8(), db_pointer);
     if (resultCode)
     {
-        auto message = sqlite3_errmsg(*db);
+        auto message = sqlite3_errmsg(*db_pointer);
 
-        sqlite3_close(*db);
+        sqlite3_close(*db_pointer);
 
         std::cerr << "Error opening database: " << message << std::endl;
     }
@@ -54,10 +54,10 @@ void DatabaseManager::openDatabaseConnection(sqlite3 **db, const juce::File &dbF
     }
 }
 
-void DatabaseManager::executeSQL(const char *sql, sqlite3 *db)
+void DatabaseManager::executeSQL(const char *sql, sqlite3 *db_pointer)
 {
     char *errMsg = nullptr;
-    if (sqlite3_exec(db, sql, nullptr, nullptr, &errMsg) != SQLITE_OK)
+    if (sqlite3_exec(db_pointer, sql, nullptr, nullptr, &errMsg) != SQLITE_OK)
     {
         std::cerr << "Error executing SQL: " << errMsg << std::endl;
 
