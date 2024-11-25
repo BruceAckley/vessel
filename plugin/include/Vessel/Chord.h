@@ -25,13 +25,15 @@ public:
     void setTonalCenter(int tonalCenter, int octave = 3);
     std::vector<int> getMidiNotes() const;
     static const std::map<juce::String, int> chordNameToMidi;
+    static const std::map<juce::String, int> functionToMidiOffset;
+    std::vector<int> transposedNotes;
 
 private:
     int rootMidiNote = 0;
-    std::vector<int> transposedNotes;
 
     void parseIntervals(const juce::String& intervalsCSV);
     void transposeIntervals();
+    int getMidiNoteFromFunction(const juce::String& function, int tonalCenter);
 };
 
 #endif // CHORD_H

@@ -21,10 +21,6 @@ namespace vessel
 
     std::optional<Resource> getResource(const juce::String &url) const;
 
-    void nativeFunction(
-        const juce::Array<juce::var> &args,
-        juce::WebBrowserComponent::NativeFunctionCompletion completion);
-
     juce::TextButton runJavaScriptButton{"Run some JavaScript"};
     juce::TextButton emitJavaScriptEventButton{"Emit JavaScript event"};
     juce::Label labelUpdatedFromJavaScript{"label",

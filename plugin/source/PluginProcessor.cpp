@@ -47,7 +47,6 @@ namespace vessel
             state.getParameter(id::TONAL_CENTER.getParamID()))},
         dbManager()
   {
-    DBG("TEST LOGGER");
     dbManager.connect();
     dbManager.runMigrations();
     chords = dbManager.getChords("basic_diatonic");
@@ -167,6 +166,7 @@ namespace vessel
     // Prevents CPU spikes when processing audio
     juce::ScopedNoDenormals noDenormals;
 
+    // TODO: Use a parameter change listener instead of direct access
     midiProcessor.setTonalCenter(tonalCenter->getIndex());
 
     buffer.clear();

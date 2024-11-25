@@ -28,7 +28,7 @@ void MidiProcessor::process(juce::MidiBuffer &midiMessages)
             {
                 Chord chord = it->second;
                 chord.setTonalCenter(tonalCenter, OCTAVE);
-                std::vector<int> notes = chord.getMidiNotes();
+                std::vector<int> notes = chord.transposedNotes;
 
                 for (int note : notes)
                 {
