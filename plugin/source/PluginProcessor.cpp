@@ -47,6 +47,7 @@ namespace vessel
             state.getParameter(id::TONAL_CENTER.getParamID()))},
         dbManager()
   {
+    DBG("TEST LOGGER");
     dbManager.connect();
     dbManager.runMigrations();
     chords = dbManager.getChords("basic_diatonic");

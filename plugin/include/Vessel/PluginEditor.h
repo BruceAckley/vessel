@@ -4,7 +4,6 @@
 #include "juce_gui_basics/juce_gui_basics.h"
 #include <juce_audio_processors/juce_audio_processors.h>
 #include <juce_gui_extra/juce_gui_extra.h>
-#include "Vessel/ParameterIDs.h"
 
 namespace vessel
 {
@@ -19,11 +18,17 @@ namespace vessel
 
   private:
     using Resource = juce::WebBrowserComponent::Resource;
-    std::optional<Resource> getResource(const juce::String &url);
+
+    std::optional<Resource> getResource(const juce::String &url) const;
 
     void nativeFunction(
         const juce::Array<juce::var> &args,
         juce::WebBrowserComponent::NativeFunctionCompletion completion);
+
+    juce::TextButton runJavaScriptButton{"Run some JavaScript"};
+    juce::TextButton emitJavaScriptEventButton{"Emit JavaScript event"};
+    juce::Label labelUpdatedFromJavaScript{"label",
+                                           "To be updated from JavaScript"};
 
     AudioPluginAudioProcessor &processorRef;
 
