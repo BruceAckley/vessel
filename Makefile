@@ -12,6 +12,9 @@ build: cmake_configure
 build-verbose: cmake_configure
 	cmake --build build -v
 
+test: build
+	cd build && ctest --output-on-failure
+
 clean:
 	rm -rf ./build
 
