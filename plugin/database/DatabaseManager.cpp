@@ -10,8 +10,9 @@ enum ChordColumns
     MOOD = 3,
     REGION = 4,
     INTERVALS = 5,
-    CADENCE = 6,
-    MAP_MODE = 7
+    ROOT_NOTE_OFFSET = 6,
+    CADENCE = 7,
+    MAP_MODE = 8
 };
 
 // Commands
@@ -159,8 +160,9 @@ std::vector<Chord> DatabaseManager::getChords(const juce::String &map_mode)
         juce::String mood = juce::String((const char *)sqlite3_column_text(stmt, ChordColumns::MOOD));
         juce::String region = juce::String((const char *)sqlite3_column_text(stmt, ChordColumns::REGION));
         juce::String intervals = juce::String((const char *)sqlite3_column_text(stmt, ChordColumns::INTERVALS));
+        int root_note_offset = sqlite3_column_int(stmt, ChordColumns::ROOT_NOTE_OFFSET);
 
-        Chord chord(function, mood, region, intervals);
+        Chord chord(function, mood, region, intervals, root_note_offset);
 
         chords.push_back(chord);
     }

@@ -13,17 +13,17 @@ public:
     juce::String mood;
     juce::String region;
     std::vector<int> intervalPattern;
+    int rootNoteOffset;
 
     Chord() = default;
     Chord(const juce::String& f, const juce::String& m,
-          const juce::String& r, const juce::String& intervalsCSV)
-        : function(f), mood(m), region(r)
+          const juce::String& r, const juce::String& intervalsCSV, const int root)
+        : function(f), mood(m), region(r), rootNoteOffset(root)
     {
         parseIntervals(intervalsCSV);
     }
 
     void setTonalCenter(int tonalCenter, int octave = 3);
-    std::vector<int> getMidiNotes() const;
     static const std::map<juce::String, int> chordNameToMidi;
     static const std::map<juce::String, int> functionToMidiOffset;
     std::vector<int> transposedNotes;
@@ -33,7 +33,6 @@ private:
 
     void parseIntervals(const juce::String& intervalsCSV);
     void transposeIntervals();
-    int getMidiNoteFromFunction(const juce::String& function, int tonalCenter);
 };
 
 #endif // CHORD_H
