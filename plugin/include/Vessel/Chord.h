@@ -29,10 +29,8 @@ public:
     std::vector<int> transposedNotes;
 
 private:
-    int rootMidiNote = 0;
-
     void parseIntervals(const juce::String& intervalsCSV);
-    void transposeIntervals();
+    void transposeIntervals(int rootMidiNote);
 };
 
 #endif // CHORD_H

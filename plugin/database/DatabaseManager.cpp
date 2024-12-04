@@ -24,10 +24,11 @@ const char *createChordsTable = "CREATE TABLE IF NOT EXISTS chords ("
                                 "mood TEXT, "      // Mood of the chord, e.g., "major", "minor", "half_diminished", "diminished"
                                 "region TEXT, "    // Functional region, e.g., "tonic", "subdominant", "dominant"
                                 "intervals TEXT, " // Intervals from the root, as a comma-separated string "0,4,7"
+                                "root_note_offset INTEGER, " // Offset from the root note, e.g., 0 for C, 1 for C#, -1 for B
                                 "cadence TEXT, "   // Contains IDs of chords that could come after in cadence
                                 "map_mode TEXT "   // Mode of the map, e.g., "basic_diatonic"
                                 ");";
-
+                                
 DatabaseManager::DatabaseManager() {}
 
 DatabaseManager::~DatabaseManager()
@@ -95,17 +96,20 @@ void DatabaseManager::connect()
     juce::File dbFile = juce::File::getSpecialLocation(juce::File::userApplicationDataDirectory).getChildFile("chords.db");
 
     openDatabaseConnection(&db, dbFile);
+    executeSQL(dropChordsTable, db);
     executeSQL(createChordsTable, db);
 }
 
 void DatabaseManager::runMigrations()
 {
-    int currentChordCount = getCurrentChordCount();
+    // int currentChordCount = getCurrentChordCount();
 
-    if (currentChordCount == 0)
-    {
+    // if (currentChordCount == 0)
+    // {
         applyMigrations();
-    }
+        int currentChordCount = getCurrentChordCount();
+        int test = 0;
+    // }
 }
 
 void DatabaseManager::applyMigrations()

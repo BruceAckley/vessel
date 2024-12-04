@@ -49,7 +49,7 @@ namespace vessel
   {
     dbManager.connect();
     dbManager.runMigrations();
-    chords = dbManager.getChords("basic_diatonic");
+    chords = dbManager.getChords("basic_diatonic_contemporary");
     midiProcessor.setChords(chords);
   }
 
