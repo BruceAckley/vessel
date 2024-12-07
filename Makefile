@@ -1,13 +1,23 @@
-cmake-configure:
+CFLAGS += -Wno-sign-conversion
+
+configure:
 	cmake -S . -B build -Wno-dev
 
-build: cmake_configure
+configure-dev:
+	cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug -DJUCE_ENABLE_MODULE_SOURCE_GROUPS=ON -Wno-dev
+
+build:
+	cd plugin/ui && npm install && npm run build && cd ../..
 	cmake --build build
 
-build-verbose: cmake_configure
+build-verbose:
+	cd plugin/ui && npm install && npm run build && cd ../..
 	cmake --build build -v
 
+test: build
+	./build/tests/AudioPluginTest --gtest_color=yes --gtest_print_time=1
+
 clean:
-	rm -rf $(BUILD_DIR)
+	rm -rf ./build
 
 .PHONY: all cmake_configure build clean

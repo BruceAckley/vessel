@@ -7,7 +7,10 @@
                 "${workspaceFolder}/**"
             ],
             "defines": [
-                "DATA_DIR=\"/path/to/data/dir\""
+                "DATA_DIR=\"/path/to/data/dir\"",
+                "JUCE_COMPANY_NAME=\"BlueOrangePurple\"",
+                "JUCE_PRODUCT_NAME=\"Vessel\"",
+                "JUCE_PRODUCT_VERSION=\"0.1.0\""
             ],
             "cStandard": "c11",
             "cppStandard": "c++17",

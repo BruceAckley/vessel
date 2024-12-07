@@ -1,0 +1,19 @@
+/* main.css - Global styles */
+@import 'variables.css';
+@import 'components.css';
+
+body {
+    margin: 0;
+    background: var(--primary-color);
+    color: var(--text-color);
+    font-family: var(--font-family);
+}
+
+#app {
+    padding: var(--spacing-lg);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}

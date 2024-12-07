@@ -1,3 +1,5 @@
+set(CMAKE_OSX_SYSROOT "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk")
+
 cmake_minimum_required(VERSION 3.30)
 
 project(VesselAudioPlugin)
@@ -10,6 +12,8 @@ endif()
 
 set(PACKAGE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/packages)
 set(DATA_DIR ${CMAKE_CURRENT_SOURCE_DIR}/data)
+set(CPM_SOURCE_CACHE ${CMAKE_CURRENT_SOURCE_DIR}/packages)
+set(CPM_USE_LOCAL_PACKAGES ON)
 
 include(cmake/cpm.cmake)
 
@@ -23,6 +27,20 @@ CPMAddPackage(
     SOURCE_DIR ${PACKAGE_DIR}/juce
 )
 
+CPMAddPackage(
+    NAME GOOGLETEST
+    GITHUB_REPOSITORY google/googletest
+    GIT_TAG v1.15.2
+    VERSION 1.15.2
+    SOURCE_DIR ${PACKAGE_DIR}/googletest
+    OPTIONS
+        "INSTALL_GTEST OFF"
+        "gtest_force_shared_crt ON"
+)
+
+enable_testing()
+
 add_compile_definitions(DATA_DIR="${DATA_DIR}")
 
 add_subdirectory(plugin)
+add_subdirectory(tests)

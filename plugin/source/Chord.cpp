@@ -6,17 +6,10 @@ const std::map<juce::String, int> Chord::chordNameToMidi = {
     {"F#", 6}, {"G", 7}, {"G#", 8}, {"A", 9}, {"A#", 10}, {"B", 11}
 };
 
-void Chord::setTonalCenter(const juce::String& tonalCenter, int octave) {
-    if (chordNameToMidi.find(tonalCenter) == chordNameToMidi.end())
-        throw std::invalid_argument("Invalid tonal center");
+void Chord::setTonalCenter(int tonalCenter, int octave) {
+    int rootMidiNote = ((octave + 1) * 12) + tonalCenter + rootNoteOffset;
 
-    rootMidiNote = (octave + 1) * 12 + chordNameToMidi.at(tonalCenter);
-
-    transposeIntervals();
-}
-
-std::vector<int> Chord::getMidiNotes() const {
-    return transposedNotes;
+    transposeIntervals(rootMidiNote);
 }
 
 void Chord::parseIntervals(const juce::String& intervalsCSV) {
@@ -29,7 +22,7 @@ void Chord::parseIntervals(const juce::String& intervalsCSV) {
     }
 }
 
-void Chord::transposeIntervals() {
+void Chord::transposeIntervals(int rootMidiNote) {
     transposedNotes.clear();
 
     for (int interval : intervalPattern) {

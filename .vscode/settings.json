@@ -68,6 +68,7 @@
         "*.mm": "cpp",
         "forward_list": "cpp",
         "print": "cpp",
-        "stack": "cpp"
+        "stack": "cpp",
+        "span": "cpp"
     }
 }

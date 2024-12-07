@@ -1,0 +1,15 @@
+/* variables.css - Design system tokens */
+
+:root {
+    /* Colors */
+    --primary-color: #2a2a2a;
+    --text-color: #ffffff;
+
+    /* Spacing */
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 2rem;
+
+    /* Typography */
+    --font-family: system-ui, -apple-system, sans-serif;
+}
