@@ -1,0 +1,16 @@
+/* components.css - Reusable UI components */
+
+.button {
+    padding: var(--spacing-sm);
+    border-radius: 4px;
+}
+
+.select {
+    margin: var(--spacing-sm) 0;
+    padding: var(--spacing-sm);
+}
+
+.card {
+    padding: var(--spacing-md);
+    border-radius: 8px;
+}

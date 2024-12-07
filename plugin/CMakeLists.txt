@@ -83,7 +83,7 @@ else()
 endif()
 
 # Folder where web UI data reside
-set(UI_FILES_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/ui/public")
+set(UI_FILES_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/ui/dist")
 
 # Copy JUCE frontend library to plugin UI files
 file(COPY "${JUCE_MODULES_DIR}/juce_gui_extra/native/javascript/" DESTINATION "${UI_FILES_SOURCE_DIR}/js/juce/")
@@ -97,10 +97,17 @@ if(NOT EXISTS ${UI_FILES_SOURCE_DIR})
     message(FATAL_ERROR "Source UI directory not found: ${UI_FILES_SOURCE_DIR}")
 endif()
 file(MAKE_DIRECTORY ${UI_FILES_DEST_DIR})
-add_custom_command(
-    TARGET ${PROJECT_NAME} POST_BUILD
+# add_custom_command(
+#     TARGET ${PROJECT_NAME} PRE_BUILD
+#     COMMAND ${CMAKE_COMMAND} -E echo "Copying from ${UI_FILES_SOURCE_DIR} to ${UI_FILES_DEST_DIR}"
+#     COMMAND ${CMAKE_COMMAND} -E copy_directory ${UI_FILES_SOURCE_DIR} ${UI_FILES_DEST_DIR}
+#     COMMAND ${CMAKE_COMMAND} -E echo "Copy completed"
+#     VERBATIM
+# )
+add_custom_target(copy_ui_files
     COMMAND ${CMAKE_COMMAND} -E echo "Copying from ${UI_FILES_SOURCE_DIR} to ${UI_FILES_DEST_DIR}"
     COMMAND ${CMAKE_COMMAND} -E copy_directory ${UI_FILES_SOURCE_DIR} ${UI_FILES_DEST_DIR}
     COMMAND ${CMAKE_COMMAND} -E echo "Copy completed"
     VERBATIM
 )
+add_dependencies(${PROJECT_NAME} copy_ui_files)

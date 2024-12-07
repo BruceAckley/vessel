@@ -1,5 +1,4 @@
-#ifndef CHORD_H
-#define CHORD_H
+#pragma once
 
 #include <juce_core/juce_core.h>
 #include <vector>
@@ -32,5 +31,3 @@ private:
     void parseIntervals(const juce::String& intervalsCSV);
     void transposeIntervals(int rootMidiNote);
 };
-
-#endif // CHORD_H
