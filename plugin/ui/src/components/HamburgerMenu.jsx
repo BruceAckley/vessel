@@ -38,7 +38,7 @@ const HamburgerMenu = () => {
     return (
         <div ref={menuRef}>
             <button
-                className="hamburger-menu-button"
+                className={`hamburger-menu-button ${isOpen ? 'open' : ''}`}
                 onClick={() => setIsOpen(!isOpen)}
                 aria-label="Toggle settings menu"
             >
@@ -49,7 +49,9 @@ const HamburgerMenu = () => {
 
             <nav className={`hamburger-menu ${isOpen ? 'open' : ''}`}>
                 <ul>
-                    <li>Some setting</li>
+                    <li>
+                        TODO: Add tonal center selector here
+                    </li>
                 </ul>
             </nav>
         </div>

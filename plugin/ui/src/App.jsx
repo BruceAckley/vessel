@@ -6,7 +6,7 @@ function App() {
         <>
             <HamburgerMenu />
             <main className="container">
-                <h1>Vessel UI</h1>
+                <h1 className='h1__title'>Vessel UI</h1>
             </main>
         </>
     )

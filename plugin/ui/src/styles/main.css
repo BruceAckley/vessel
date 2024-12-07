@@ -16,4 +16,10 @@ body {
 .container {
     max-width: 1200px;
     margin: 0 auto;
+    padding: 0 var(--spacing-md);
+}
+
+.h1__title {
+    font-size: 2rem;
+    margin-bottom: var(--spacing-md);
 }
