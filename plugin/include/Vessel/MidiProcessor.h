@@ -9,8 +9,9 @@ class MidiProcessor
     public:
         void process(juce::MidiBuffer& midiMessages);
         void setChords(const std::vector<Chord>& chordData);
+        void setTonalCenter(int t);
 
     private:
         std::unordered_map<int, Chord> chords;
-        juce::String tonalCenter = "C";
+        int tonalCenter = 0;
 };

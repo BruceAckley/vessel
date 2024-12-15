@@ -1,0 +1,89 @@
+.hamburger-menu-button {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 2rem;
+    height: 2rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin: var(--spacing-sm);
+    z-index: 10;
+    position: relative;
+}
+
+.hamburger-menu-button span {
+    width: 2rem;
+    height: 0.25rem;
+    background: var(--text-color);
+    border-radius: 10px;
+    transition: all 0.3s linear;
+    position: absolute;
+    left: 0;
+    transform-origin: center;
+    transition: all 0.3s ease-in-out;
+}
+
+.hamburger-menu-button span:first-child {
+    top: 10%;
+}
+
+.hamburger-menu-button span:nth-child(2) {
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.hamburger-menu-button span:last-child {
+    bottom: 10%;
+}
+
+/* X animation states when menu is open */
+.hamburger-menu-button.open span:first-child {
+    transform: translateY(0.7rem) rotate(46deg);
+}
+
+.hamburger-menu-button.open span:nth-child(2) {
+    opacity: 0;
+    transform: translateX(-100%);
+}
+
+.hamburger-menu-button.open span:last-child {
+    transform: translateY(-0.7rem) rotate(-46deg);
+}
+
+.hamburger-menu {
+    position: fixed;
+    top: 0;
+    right: -24rem;
+    height: 100vh;
+    width: 250px;
+    background: var(--background-color);
+    padding: 2rem;
+    transition: transform 0.3s ease-in-out;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.hamburger-menu.open {
+    transform: translateX(-48rem);
+}
+
+.hamburger-menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 2rem 0;
+}
+
+.hamburger-menu li {
+    margin: 1rem 0;
+}
+
+.hamburger-menu a {
+    text-decoration: none;
+    color: var(--text-color);
+    font-size: 1.5rem;
+}
+
+/* 
+TODO: For combo box component, add redux to get the inital ui state from JUCE. Perhaps add a hook for JUCE to refresh the UI state?
+*/
