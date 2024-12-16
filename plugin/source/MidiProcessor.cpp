@@ -53,3 +53,18 @@ void MidiProcessor::setTonalCenter(int t)
 {
     this->tonalCenter = t;
 }
+
+// TODO: Parse time signature meta-event, this will be useful for things
+// like passing tones
+// Example:
+// // Get the current position and tempo information from the host
+// AudioPlayHead* playHead = getPlayHead();
+// if (playHead != nullptr)
+// {
+//     // Get the current time signature
+//     int numerator = playHead->getTimeSignatureNumerator();
+//     int denominator = playHead->getTimeSignatureDenominator();
+
+//     // Use the time signature data as needed
+//     DBG("Time signature: " << numerator << "/" << denominator);
+// }

@@ -1,0 +1,13 @@
+.chord-map-container {
+    width: 100%;
+    height: 100vh;
+    position: relative;
+}
+
+.chord-label {
+    color: white;
+    position: absolute;
+    pointer-events: none;
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+}

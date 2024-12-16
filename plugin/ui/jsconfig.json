@@ -1,20 +1,32 @@
 // jsconfig.json
 {
     "compilerOptions": {
-      "baseUrl": "src",
-      "jsx": "react",
-      "checkJs": true,
-      "moduleResolution": "node",
-      "target": "es2020",
-      "module": "commonjs",
-      "resolveJsonModule": true,
-      "esModuleInterop": true,
-      "paths": {
-        "@/*": ["*"],
-        "@components/*": ["components/*"],
-        "@store/*": ["store/*"]
-      }
+        "baseUrl": "src",
+        "jsx": "react",
+        "checkJs": true,
+        "moduleResolution": "node",
+        "target": "es2020",
+        "module": "commonjs",
+        "resolveJsonModule": true,
+        "esModuleInterop": true,
+        "paths": {
+            "@/*": [
+                "*"
+            ],
+            "@components/*": [
+                "components/*"
+            ],
+            "@store/*": [
+                "store/*"
+            ]
+        }
     },
-    "include": ["src/**/*"],
-    "exclude": ["node_modules", "build", "dist"]
-  }
+    "include": [
+        "src/**/*"
+    ],
+    "exclude": [
+        "node_modules",
+        "build",
+        "dist"
+    ]
+}

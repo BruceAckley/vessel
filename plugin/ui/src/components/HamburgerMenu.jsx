@@ -1,26 +1,13 @@
-/* 
-* Implements the sliding preferences menu
-*
-* Methods:
-* - initMenu: Initializes the menu
-* - toggleVisible: Expands or collapses the menu
-* - setTonalCenter: Hanldes the tonal center selection
-* - setMapMode: Handles the map mode selection
-* - setMood: Handles the mood selection
-* - setVoiceLeading: Handles the voice leading selection
-* - setPassingTones: Handles the passing tones selection
-* - saveDock: save the current dock to the user's preferences
-* - loadDock: load the user's preferences
-* - resetDock: reset the dock to the default state
-* - exportDock: export the dock to a file
-*/
-
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useId } from 'react';
 import '../styles/HamburgerMenu.css';
+import * as Juce from "../../juce/index.js";
 
 const HamburgerMenu = () => {
     const [isOpen, setIsOpen] = useState(false);
     const menuRef = useRef(null);
+    const tonalCenterSelectId = useId();
+    const [tonalCenterOptions, setTonalCenterOptions] = useState([]);
+    const [selectedTonalCenter, setSelectedTonalCenter] = useState('');
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -30,10 +17,30 @@ const HamburgerMenu = () => {
         };
 
         document.addEventListener('mousedown', handleClickOutside);
+
+        const tonalCenterComboBoxState = Juce.getComboBoxState('tonalCenterComboBox');
+
+        tonalCenterComboBoxState.propertiesChangedEvent.addListener(() => {
+            setTonalCenterOptions(tonalCenterComboBoxState.properties.choices);
+        });
+
+        tonalCenterComboBoxState.valueChangedEvent.addListener(() => {
+            setSelectedTonalCenter(tonalCenterComboBoxState.getChoiceIndex());
+            tonalCenterComboBoxState.propertiesChangedEvent.removeListener();
+            tonalCenterComboBoxState.valueChangedEvent.removeListener();
+        });
+
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, []);
+
+    const handleTonalCenterChange = (event) => {
+        const index = event.target.selectedIndex;
+        setSelectedTonalCenter(index);
+        const tonalCenterComboBoxState = Juce.getComboBoxState('tonalCenterComboBox');
+        tonalCenterComboBoxState.setChoiceIndex(index);
+    };
 
     return (
         <div ref={menuRef}>
@@ -49,8 +56,23 @@ const HamburgerMenu = () => {
 
             <nav className={`hamburger-menu ${isOpen ? 'open' : ''}`}>
                 <ul>
-                    <li>
-                        TODO: Add tonal center selector here
+                    <li className='list-item'>
+                        <label htmlFor={tonalCenterSelectId}>
+                            Select tonal center (key):
+                        </label>
+                        <select
+                            id={tonalCenterSelectId}
+                            className="select"
+                            value={selectedTonalCenter}
+                            onChange={handleTonalCenterChange}
+                        >
+                            <option></option>
+                            {tonalCenterOptions.map((option, index) => (
+                                <option key={index} value={option}>
+                                    {option}
+                                </option>
+                            ))}
+                        </select>
                     </li>
                 </ul>
             </nav>

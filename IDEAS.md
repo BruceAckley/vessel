@@ -49,3 +49,19 @@ Distribute the Evergreen Standalone Installer: You can include the WebView2 Ever
 Use Fixed Version Distribution: You can package a specific version of the WebView2 runtime with your application. This ensures that your application uses the exact version of the runtime you tested with, but it increases the size of your application.
 
 To summarize, you need to ensure that the WebView2 runtime is available on the Windows machines where your plugin will run. It is not statically linked into your application, so you cannot compile it on Mac or Linux and expect it to work without the runtime on Windows.
+
+=== 
+
+Possible future settings:
+
+/* s
+* Functions:
+* - setMapMode: Handles the map mode selection
+* - setMood: Handles the mood selection
+* - setVoiceLeading: Handles the voice leading selection
+* - setPassingTones: Handles the passing tones selection
+* - saveDock: save the current dock to the user's preferences
+* - loadDock: load the user's preferences
+* - resetDock: reset the dock to the default state
+* - exportDock: export the dock to a file
+*/
